@@ -6,5 +6,5 @@ WORKDIR /code
 COPY requirements.txt /code/
 RUN pip3 install -r requirements.txt
 COPY . /code/
-
-CMD []
+COPY migratedb.sh /migratedb.sh
+RUN chmod +x /migratedb.sh
