@@ -1,0 +1,52 @@
+version: '3.7'
+
+networks:
+  backend:
+    driver: bridge
+
+services:
+
+  database:
+    working_dir: /app/database/
+    image: postgres
+    container_name: database
+    expose:
+      - 5432
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+    networks:
+      - backend
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    ports:
+      - "2222:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
+      - PGADMIN_DEFAULT_PASSWORD=password
+    networks:
+      - backend
+    depends_on:
+      - database
+
+  api:
+    build: .
+    container_name: api
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    networks:
+      - backend
+    depends_on:
+      - database
+  migration:
+    image: uzman
+    command: python manage.py migrate --noinput
+    volumes:
+      - .:/code
+    depends_on:
+      - database

@@ -23,11 +23,11 @@ class Step(models.Model):
     recipe = models.ForeignKey(Recipe, related_name='steps', on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.text
+        return self.step_text
 
     class Meta:
         verbose_name_plural = "Steps"
-        unique_together = ('recipe', 'text')
+        unique_together = ('recipe', 'step_text')
 
 
 class Ingredient(models.Model):
@@ -41,5 +41,3 @@ class Ingredient(models.Model):
     class Meta:
         verbose_name_plural = "Ingredients"
         unique_together = ('recipe', 'text')
-
-
