@@ -20,6 +20,19 @@ class Recipe(models.Model):
 class Step(models.Model):
     step_text = models.CharField(max_length=200, null=False, blank=True)
     # Many to one recipe relationship
+    recipe = models.ForeignKey(Recipe, related_name='steps', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        verbose_name_plural = "Steps"
+        unique_together = ('recipe', 'text')
+
+
+class Ingredient(models.Model):
+    text = models.CharField(max_length=200, null=False, blank=True)
+    # Many to one recipe relationship
     recipe = models.ForeignKey(Recipe, related_name='ingredients', on_delete=models.CASCADE)
 
     def __str__(self):
@@ -28,3 +41,5 @@ class Step(models.Model):
     class Meta:
         verbose_name_plural = "Ingredients"
         unique_together = ('recipe', 'text')
+
+
